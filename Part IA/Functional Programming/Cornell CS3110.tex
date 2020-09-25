@@ -50,7 +50,7 @@ numberstyle = \tiny,
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \maketitle
-No, I'm not from Cornell. But I think this set of lectures on OCaml is really useful for learning functional programming, which is why I am including it in these notes.
+No, I'm not from Cornell. But I think this set of lectures on OCaml is really useful for learning functional programming, which is why I am including it in these notes. I studied this course before my Java course because I think it will add value to learn Java course with prior knowledge of the functional programming paradigm.
 \section{Introduction}
 \textbf{Functional languages: }
 \begin{itemize}
@@ -109,7 +109,7 @@ Note that you don't put brackets around the arguments. Also, all functions only 
 let rec f x1 x2 ... xn = e
 val f : t1 -> t2 -> ... tn -> te
 \end{lstlisting}
-The second line is output in the command line. Type $t -> u$ is the type of a function that takes an input of type t and returns an output of type u.
+The second line is output in the command line. Type \verb|t -> u| is the type of a function that takes an input of type t and returns an output of type u.
 \\\\
 \textbf{Anonymous Functions}
 \begin{lstlisting}[language = Caml]
@@ -283,5 +283,336 @@ let f x : point =
 \end{lstlisting}
 \textbf{Back to variants}
 
-Recall: variants are enumerated sets of values
+Recall: variants are enumerated sets of values. In particular, you can have a variant that enumerates values that of different types.
+\begin{lstlisting}[language=Caml]
+type point = float * float
+type shape =
+	| Point of point
+	| Circle of point * float
+	| Rect of point * point
+
+let pt1 : point = (1., 2.)
+(*pt1 = point(1., 2.) is invalid!! *)
+let pt2 : shape = Point(1., 2.)
+let pt3 = Circle (pt1, 2.)
+let pt4 = Circle ((1., 2.), 3.)
+(*note that since Circle's type is point * float, you don't need to define the tuple as a point since it is already defined!*)
+\end{lstlisting}
+The data type of shape is called an \textbf{algebraic data type} because it is a \textbf{tagged union} (Google nonintersecting union if you're not sure)
+\\\\
+This allows you to classify things under other things. This is similar to inheritance with classes in Java. We may combine this with functions to allow a function to take in arguments of various types (patterns), which is similar to overloading in Java.
+\begin{lstlisting}[language=Caml]
+let area = function
+	| Point _ -> 0.0
+	| Circle (_,r) -> pi *. (r ** 2.0)
+	| Rect ((x1,y1),(x2,y2)) ->
+	let w = x2 -. x1 in
+	let h = y2 -. y1 in
+	w *. h
+\end{lstlisting}
+\textbf{Recursive Variants}
+
+We may implement the linked list data type with a recursive variant definition.
+\begin{lstlisting}[language=Caml]
+type intlist = Nil | Cons of int * intlist
+
+let emp = Nil
+let l3 = Cons (3, Nil) (* 3::[] or [3]*)
+let l123 = Cons(1, Cons(2, l3)) (* [1;2;3] *)
+
+let rec sum (l:intlist) =
+	match l with
+	| Nil -> 0
+	| Cons(h,t) -> h + sum t
+	
+let rec length = function
+	| Nil -> 0
+	| Cons (_,t) -> 1 + length t
+	(* length : intlist -> int *)
+
+let empty = function
+	| Nil -> true
+	| Cons _ -> false
+	(* empty: intlist -> bool *)
+\end{lstlisting}
+We may also use \verb|'a| to allow our list to accept other types.
+\begin{lstlisting}[language=Caml]
+type 'a mylist = Nil | Cons of 'a * 'a mylist
+int mylist
+\end{lstlisting}
+Mylist is known as a \textbf{type constructor}, because it takes a type as an input and returns a type.
+\section{Higher-order Programming}
+Recall that functions are values, so we can pass them as arguments. This is an example of functions being 'first-class citizens' lol.
+\begin{lstlisting}[language=Caml]
+let square x = x * x
+let quad x = (square x) * (square x)
+let twice f x = f (f x)
+let quad2 x = twice square x
+\end{lstlisting}
+The slides didn't mention this, but I believe that the lack of distinction between functions and values is why braces around function arguments were not implemented.
+\\\\
+\textbf{Map and Fold}
+
+Note: map is not a method to store key - value pairs!
+\begin{lstlisting}[language=Caml]
+let rec map f = function
+	|[] -> []
+	| h::t -> (f h) :: (map f t)
+
+let add1 = List.map (fun x -> x + 1)
+let list1 = [1; 2; 3; 4]
+add1 list1 (*returns [2; 3; 4; 5]*)
+\end{lstlisting}
+\textbf{Filter}
+\begin{lstlisting}[language=Caml]
+let rec filter f = function
+	|[] -> []
+	| h::t -> 
+		if f h
+		then h::(filter f t)
+		else filter f t
+
+let filter1 = List.filter (fun x -> x > 2)
+let list1 = [1; 2; 3; 4]
+filter1 list1 (*returns [3; 4]*)
+\end{lstlisting}
+These are called iterators.
+\\\\
+\textbf{Combining Elements}
+\begin{lstlisting}[language=Caml]
+let rec combine init op = function
+	| [] -> init
+	| h::t -> op h (combine init op t)
+	
+let sum = combine 0 (+)
+let concat = combine "" (^)
+\end{lstlisting}
+Notice once again how all these functions can be ordered around as values. With braces, the code would be more confusing than without, which is quite interesting! Notice also the use of \verb|()| to convert an infix operator to a prefix operator.
+\\\\
+OCaml has a \verb|fold_right / fold_left| operator to do this explicitly.
+\begin{lstlisting}[language=Caml]
+let rec fold_right f t acc =
+	match t with
+	| [] -> acc
+	| h2::t2 -> f h2 (fold_right f t2 acc)
+
+List.fold_right f [a;b;c] init
+(*computes f a (f b (f c init))*)
+
+let rec fold_left f acc t =
+	match t with
+	| [] -> acc
+	| h2::t2 -> fold_left f (f acc h2) t2
+(*note the difference between fold_left and fold_right's implementation - fold_right has to reach the rightmost element before evaluating f but fold_left evaluates the left-most element straight away*)
+\end{lstlisting}
+\section{Modular Programming}
+OCaml uses \textbf{functional data structures} which means that data structures never change (again, to avoid having multi-valued things)
+\begin{lstlisting}[language=Caml]
+module MyStack = struct
+  type 'a stack =
+    | Empty
+    | Entry of 'a * 'a stack
+  let empty = Empty
+  let is_empty s = s = Empty
+  let push x s = Entry (x, s)
+  let peek = function
+    | Empty -> failwith "Empty"
+    | Entry(x,_) -> x
+  let pop = function
+    | Empty -> failwith "Empty"
+    | Entry(_,s) -> s
+end
+
+let test1 = MyStack.empty;;
+let test2 = MyStack.push 1 test1;;
+let test3 = MyStack.push 2 test2;;
+
+(*returns*)
+val test3 : int MyStack.stack =
+  MyStack.Entry (2, MyStack.Entry (1, MyStack.Empty))
+\end{lstlisting}
+\begin{itemize}
+	\item Note the \verb|module...struct| keywords; which is equivalent to classes in Java. Specifically, a module creates a new \textbf{namespace}.
+	\item In particular, you need to define the type which is needed for type inference.
+	\item Note the last 3 lines: it is not possible to push an element into the original stack, because the stack is not mutable.
+\end{itemize}
+\textbf{Function Signature}
+
+It is possible to define the function signature, i.e. what types of variables it can input and output, as well as what functions to be accessed from outside the module.
+
+The 2 benefits are:
+\begin{itemize}
+	\item input and output types are correct
+	\item unnecessary methods are hidden
+\end{itemize}
+\begin{lstlisting}[language=Caml]
+module type S1 = sig
+  val x:int
+  val y:int
+end
+module M1 : S1 = struct
+  let x = 42
+end
+(*Error: Signature mismatch:
+Modules do not match: sig val x : int end is not included in S1
+The value `y' is required but not provided*)
+module type S2 = sig
+  val x:int
+end
+module M2 : S2 = struct
+  let x = 42
+  let y = 7
+end
+M2.y
+(*Error: Unbound value M2.y*)
+\end{lstlisting}
+\textbf{Abstract Types}
+
+There is one more step to abstraction: not revealing the data structure in the module signature.
+\begin{lstlisting}[language=Caml]
+module type ListStackSig = sig
+  val empty : 'a list
+  val is_empty : 'a list -> bool
+  val push : 'a -> 'a list -> 'a list
+  val peek : 'a list -> 'a
+  val pop : 'a list -> 'a list
+end
+
+module ListStack = struct
+  let empty = []
+  let is_empty s = s = []
+  let push x s = x :: s
+  let peek = function
+    | [] -> failwith "Empty"
+    | x::_ -> x
+  let pop = function
+    | [] -> failwith "Empty"
+    | _::xs -> xs
+end
+  (*client's code*)
+let x = ListStack.empty;;
+let y = ListStack.push 1 x;;
+let z = (2 :: y);; 
+\end{lstlisting}
+In this example, after realising that \verb|ListStack| is implemented with list, the client decides to use the \verb|::| function to concatenate lists. However, if you decide to change the type used in \verb|ListStack| to something else, all of the client's code that uses \verb|::| will break. Hence, the type used in implementation shouldn't be revealed.
+\begin{lstlisting}[language=Caml]
+module type Stack = sig
+  type 'a t
+  val empty : 'a t
+  val is_empty : 'a t -> bool
+  val push : 'a -> 'a t -> 'a t
+  val peek : 'a t -> 'a
+  val pop : 'a t -> 'a t
+end
+
+module ListStack : Stack = struct
+  type 'a t = 'a list (*this line informs the compiler that all the ts refer to lists*)
+      ...
+\end{lstlisting}
+Here, we give an arbitrary type \verb|stack| so the client would not know what type we have used. By convention \verb|t| is used to refer to an abstract type.
+\section{Functors}
+\textbf{Interface Inheritance}
+\begin{lstlisting}[language=Caml]
+module type Ring = sig
+  type t
+  val zero : t
+  val one : t
+  val add : t -> t -> t
+  val mult : t -> t -> t
+  val neg : t -> t
+end
+module type Field = sig
+  include Ring
+  val div : t -> t -> t
+end
+
+module FloatRing = struct
+  type t = float
+  let zero = 0.
+  let one = 1.
+  let add = (+.)
+  let mult = ( *. )
+  let neg = (~-.)
+end
+module FloatField = struct
+  include FloatRing
+  let div = (/.)
+end
+\end{lstlisting}
+So \verb|include| works for both module signatures and modules.
+\\\\
+\textbf{Functors}
+\\
+Functors take structures as inputs and output another structure. So even modules are treated like functions!
+\begin{lstlisting}[language=Caml]
+module type X = 
+sig val x : int 
+end
+
+module IncX (M : X) = struct
+  let x = M.x + 1
+end
+
+(*in anonymous form as well*)
+module IncX = functor (M : X) -> struct
+  let x = M.x + 1
+end
+
+module A = struct let x = 0 end
+module B = IncX(A) (* B.x is 1 *)
+module C = IncX(B) (* C.x is 2 *)
+\end{lstlisting}
+One use of functors is to test whether modules of a certain signature are working.
+\begin{lstlisting}[language=Caml]
+assert (MyStack.(empty |> push 1 |> peek) = 1)
+(*The output of MyStack.empty is piped to MyStack.push 1 using the pipe operator. Assert throws an exception if the expression evaluates to false.*)
+
+(*instead of*)
+assert (MyStack.(
+    empty |> push 1 |> peek) = 1) ;;
+assert (ListStack.(
+    empty |> push 1 |> peek) = 1);;
+assert (WhateverStack.(
+    empty |> push 1 |> peek) = 1)
+    
+(*we could write*)
+module StackTester (S:StackSig) = struct
+  assert (S.(empty |> push 1 |> peek) = 1)
+end
+module MyStackTester
+  = StackTester(MyStack)
+module ListStackTester
+  = StackTester(ListStack)
+  
+(*note that this works because when instantiating the StackTester module, it evaluates each expression within it, even if it isn't a let x = ... expression.*)
+\end{lstlisting}
+\verb|include| works with functors as well... But to be fair it isn't surprising as a functor is just another module.
+\begin{lstlisting}[language=caml]
+module type Sig = sig ... end
+module Ext (M:Sig) = struct
+  include M
+  let f =
+    ...
+end
+\end{lstlisting}
+\section{Abstraction and Specification}
+You should document your code properly if you want it to be readable. The following sections have guidelines on how to write specifications to make it easy for someone else to read.
+\begin{lstlisting}[language=caml]
+(**
+ * returns: [hd lst] is the head of [lst].
+ * example: hd [1; 2; 3] is 1.
+ * requires: [lst] is non-empty.
+ * raises: [Failure "hd"] if [lst] is empty.
+ * effects: ...
+ *)
+val hd : 'a list -> 'a
+(*this last line would be in your module signature*)
+\end{lstlisting}
+The starry formatting allows html or others to parse the comments. The square brackets will format the words as \verb|words|.
+\section{Abstraction Functions and Representation Invariants}
+Not critical to the Cambridge OCaml course. Will add in later if I feel like it.
+\section{Testing}
+Not critical to the Cambridge OCaml course. Will add in later if I feel like it.
+\section{Streams and Laziness}
+
 \end{document}

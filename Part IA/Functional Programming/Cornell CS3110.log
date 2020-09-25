@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.8.28)  23 SEP 2020 17:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.8.28)  25 SEP 2020 17:44
 entering extended mode
 **"./Cornell CS3110.tex"
 ("Cornell CS3110.tex"
@@ -884,29 +884,54 @@ Underfull \hbox (badness 10000) in paragraph at lines 232--235
 
  []
 
-[5] [6] ("Cornell CS3110.aux") ) 
+[5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 301--304
+
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 352--355
+
+ []
+
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 379--382
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 390--393
+
+ []
+
+[9] [10] [11] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 542--547
+
+ []
+
+[13] [14] [15] ("Cornell CS3110.aux") ) 
 Here is how much of TeX's memory you used:
- 26171 strings out of 480790
- 637511 string characters out of 2897301
- 1223073 words of memory out of 3000000
- 41740 multiletter control sequences out of 15000+200000
+ 26362 strings out of 480790
+ 639487 string characters out of 2897301
+ 1232073 words of memory out of 3000000
+ 41931 multiletter control sequences out of 15000+200000
  548306 words of font info for 84 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 68i,12n,98p,736b,1751s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\leeji\AppData\Local\MiKTeX\fonts/pk/
-ljfour/jknappen/ec/dpi600\tcrm1200.pk><C:/Users/leeji/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/leeji/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/leeji/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/leeji
-/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Use
-rs/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb>
+ 68i,12n,98p,736b,1776s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\leeji\AppData\Local\MiKTeX\fo
+nts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk><C:/Users/leeji/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/leeji/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/leeji/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/User
+s/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb>
 <C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmtt10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmtt12.pfb>
-Output written on "Cornell CS3110.pdf" (6 pages, 112380 bytes).
+r6.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmsy10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/amsfonts/cm/cmtt10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmtt12.pfb>
+Output written on "Cornell CS3110.pdf" (15 pages, 140197 bytes).
 PDF statistics:
- 61 PDF objects out of 1000 (max. 8388607)
+ 91 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

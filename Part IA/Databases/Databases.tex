@@ -1,0 +1,378 @@
+\documentclass[12pt,a4paper]{article} % uncomment, if revtex is not installed
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{wasysym}
+\usepackage{natbib}
+\usepackage{fixmath}
+\usepackage{comment}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+\usepackage{listings}
+\pagestyle{fancyplain}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\fancyhf{}
+\setlength{\parindent}{0in}
+\lstset{
+tabsize = 4, %% set tab space width
+showstringspaces = false, %% prevent space marking in strings, string is defined as the text that is generally printed directly to the console
+numbers = left, %% display line numbers on the left
+commentstyle = \color[rgb]{0,0.5,0}, %% set comment color
+keywordstyle = \color{blue}, %% set keyword color
+stringstyle = \color{red}, %% set string color
+rulecolor = \color{black}, %% set frame color to avoid being affected by text color
+basicstyle = \small \ttfamily , %% set listing font and size
+breaklines = true, %% enable line breaking
+numberstyle = \tiny,
+}
+
+\lhead{ \fancyplain{}{Ivin Lee, il315@cam.ac.uk} }
+\rhead{ \fancyplain{}{Databases}}
+\cfoot{ \fancyplain{}{\thepage{}} }
+
+\newcommand{\snt}[1]{\textcolor{magenta}{#1}} % edited by Sergei 
+\newcommand{\crsid}[1]{\textcolor{red}{#1}} % edited by crsid
+\newcommand{\sntdel}[1]{\textcolor{green}{\sout{#1}}} % deleted by Sergei
+
+\newcommand{\problem}[1]{\subsection*{#1}
+\setcounter{equation}{0}}
+\newcommand{\question}[1]{\problem{Q. #1}}
+\newcommand{\pproblem}[1]{\subsubsection*{(#1)}}
+
+\author{Ivin Lee}
+\title{Databases}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+\section{Lecture 1}
+\textbf{Database Systems in course}
+	\begin{itemize}
+	\item HyperSQL
+	\item DOCtor Who
+	\item Neo4j
+	\end{itemize}
+\textbf{Interface}
+
+This course will deal with Database Management Systems from the perspective of an application developer, and will teach the interfaces of these systems.
+\\\\
+\textbf{Database Management System}
+
+Implements CRUD operations
+	\begin{itemize}
+	\item Create
+	\item Read
+	\item Update
+	\item Delete
+	\end{itemize}
+Implements ACID transactions for concurrent updates
+	\begin{itemize}
+	\item Atomicity: either all actions carried out or none carried out
+	\item Consistency: database is consistent before and after transactions
+	\item Isolation: every transaction happens independently of other transactions: allows for concurrency
+	\item Durability: if transaction happens successfully, then its effects will persist
+	\end{itemize}
+\textbf{SQL}
+
+HyperSql - just a java file, overhead of using is low
+\\\\
+\textbf{NoSQL}
+
+Not only SQL - non-relational, distributed, open-source, horizontally scalable.
+	\begin{itemize}
+	\item Scalability: data stored on multiple machines
+	\item Fault Tolerance: service can survive failure of some machines
+	\item Lower Latency: data located closer to widely distributed users
+	\end{itemize}
+\textbf{Distributing Data}
+	\begin{itemize}
+	\item Replication
+	\item Partitioning
+	\end{itemize}
+\textbf{CAP Concepts}
+	\begin{itemize}
+	\item Consistency: all reads return data up-to-date
+	\item Availability: all clients can fine some replica of the data
+	\item Partition Tolerance: system can still operate despite loss or failure of part of the system
+	\end{itemize}
+Cannot achieve all of these, some balance.
+\\\\
+\textbf{CAP Principle}
+
+In a highly distributed system, 
+	\begin{itemize}
+	\item Assume that network partitions and other connectivity problems will occur
+	\item Implementing ACID transactions is very difficult and slow
+	\item trade-off between availability and consistency
+	\end{itemize}
+Eventual consistency - if update activity ceases, then the system will reach a consistent state.
+\\\\
+\textbf{BASE}
+	\begin{itemize}
+	\item BA: basically available
+	\item S: soft state
+	\item E: eventual consistency
+	\end{itemize}
+This is an area of ongoing research.
+\\\\
+\textbf{Polyglot Persistence}
+
+Using various Database Management Systems to manage different sets of data
+\\\\
+Conclusion: there will be a lot of changes in Database Management Systems.
+\section{SQL Commands}
+\textbf{Aggregate Commands}
+\begin{lstlisting}[language=SQL]
+select position, count(*) as total
+from has_position
+group by position
+order by total desc;
+\end{lstlisting}
+SQL creates new rows where each row 'contains' all the rows which have the same \verb|position|. Then, each column in the new table can only be aggregate commands like \verb|count(*)|, \verb|min(...)|.
+\\\\
+\textbf{Join}
+\begin{lstlisting}[language=SQL]
+select title, genre
+from movies
+join has_genre on has_genre.movie_id = movies.movie_id
+join genres on genres.genre_id = has_genre.genre_id
+where year = 2017
+limit 20;
+
+
+\end{lstlisting}
+\begin{lstlisting}
+TITLE                   GENRE
+----------------------  ---------
+Wonder Woman            Fantasy
+Wonder Woman            Action
+Wonder Woman            Adventure
+It                      Horror
+The Greatest Showman    Drama
+The Greatest Showman    Musical
+The Greatest Showman    Biography
+The Foreigner           Action
+The Foreigner           Thriller
+A Dog's Purpose         Drama
+A Dog's Purpose         Comedy
+A Dog's Purpose         Adventure
+Blade Runner 2049       Drama
+Blade Runner 2049       Action
+Blade Runner 2049       Mystery
+Spider-Man: Homecoming  Action
+Spider-Man: Homecoming  Sci-Fi
+Spider-Man: Homecoming  Adventure
+Coco                    Animation
+Coco                    Adventure
+\end{lstlisting}
+Joining duplicates entries. Since some movies might have more than 1 genre, identifying these movies requires work as SQL evaluates each row separately so \verb|select * from movies join genres where genre = genre_1 and genre = genre_2| doesn't work.
+\\\\
+\textbf{Multiple Joins}
+
+The way around this problem is to just join the \verb|genres| table multiple times so each row has two \verb|genres| columns!
+\begin{lstlisting}[language=sql]
+select title, year, rating, votes
+from movies as m
+join has_genre as hg1 on hg1.movie_id = m.movie_id
+join has_genre as hg2 on hg2.movie_id = m.movie_id
+join genres as g1 on g1.genre_id = hg1.genre_id
+join genres as g2 on g2.genre_id = hg2.genre_id
+where m.votes > 100000 and g1.genre = 'Romance' and g2.genre = 'Comedy'
+order by votes desc;
+\end{lstlisting}
+If you are discerning enough, you'll realise that there are actually 4 rows for each original row! This results in a bigger search time complexity. Example rows are shown below.
+\begin{lstlisting}
+TITLE                 GENRE      GENRE
+--------------------  ---------  ---------
+In the Mood for Love  Drama      Drama
+In the Mood for Love  Drama      Romance
+In the Mood for Love  Romance    Drama
+In the Mood for Love  Romance    Romance
+Chicken Run           Animation  Animation
+Chicken Run           Animation  Comedy
+Chicken Run           Animation  Adventure
+Chicken Run           Comedy     Animation
+Chicken Run           Comedy     Comedy
+Chicken Run           Comedy     Adventure
+\end{lstlisting}
+\textbf{Nesting}
+
+Possible to nest queries, i.e. search a sample space generated from another select statement.
+\begin{lstlisting}[language=sql]
+select m1.title, m1.year, g.genre, m1.rating, m1.votes
+from movies as m1
+join has_genre as hg on hg.movie_id = m1.movie_id
+join genres as g on g.genre_id = hg.genre_id
+where m1.votes > 100000 and (not (g.genre = 'Romance' or g.genre = 'Comedy'))
+      and m1.movie_id in
+         (select m2.movie_id
+         from movies as m2
+         join has_genre as hg1 on hg1.movie_id = m2.movie_id
+         join has_genre as hg2 on hg2.movie_id = m2.movie_id
+         join genres as g1 on g1.genre_id = hg1.genre_id
+         join genres as g2 on g2.genre_id = hg2.genre_id
+         where g1.genre = 'Romance' and g2.genre = 'Comedy')
+order by m1.votes desc
+limit 10;
+\end{lstlisting}
+\textbf{Views}
+
+Instead of nesting select statements, it is possible to create a \verb|view|, which can be used in the same way as a table.
+\begin{lstlisting}[language=sql]
+drop view if exists romcom_ids;
+
+create view romcom_ids as
+    select m.movie_id as movie_id
+    from movies as m
+    join has_genre as hg1 on hg1.movie_id = m.movie_id
+    join has_genre as hg2 on hg2.movie_id = m.movie_id
+    join genres as g1 on g1.genre_id = hg1.genre_id
+    join genres as g2 on g2.genre_id = hg2.genre_id
+    where g1.genre = 'Romance' and g2.genre = 'Comedy';
+
+select m.title, m.year, g.genre, m.rating, m.votes
+from romcom_ids as r
+join has_genre as hg on hg.movie_id = r.movie_id
+join genres as g on g.genre_id = hg.genre_id
+join movies as m on m.movie_id = r.movie_id
+where m.votes > 100000 and (not (g.genre = 'Romance' or g.genre = 'Comedy'))
+order by m.votes desc
+limit 10;
+\end{lstlisting}
+\textbf{Three-valued Logic}
+
+SQL allows columns to be \verb|null|. This means that statements can evaluate to \verb|true, false| and \verb|null|.
+\begin{lstlisting}[language=sql]
+select count(*)
+from people
+where deathYear = null
+
+returns 0
+\end{lstlisting}
+\verb|* = null| returns null, and \verb|select ... where| only returns records when the \verb|where| clause returns \verb|true|. 
+\\\\
+To solve this, SQL introduced \verb|is null|.
+\begin{lstlisting}[language=sql]
+select count(*)
+from people
+where deathYear is null
+
+returns 5919
+\end{lstlisting}
+\textbf{Left Join}
+
+The way \verb|join| works is to strike off the rows which cannot match the other table. However, in some situations we would like to preserve these rows, and we can do so using \verb|left join| or \verb|right join|.
+\begin{lstlisting}[language=sql]
+select name, position
+from people as p
+join has_position as c on p.person_id = c.person_id
+join movies as m on c.movie_id = m.movie_id
+where title = 'Silver Linings Playbook';
+\end{lstlisting}
+\begin{lstlisting}
+NAME               POSITION
+-----------------  --------
+Robert De Niro     actor
+Bruce Cohen        producer
+Bradley Cooper     actor
+Donna Gigliotti    producer
+Jonathan Gordon    producer
+David O. Russell   director
+Jacki Weaver       actor
+Jennifer Lawrence  actor
+Matthew Quick      writer
+\end{lstlisting}
+Joining this table with the roles table gives:
+\begin{lstlisting}[language=sql]
+select name, position, role
+from people as p
+join has_position as c on p.person_id = c.person_id
+join movies as m on c.movie_id = m.movie_id
+join plays_role as r on r.movie_id = m.movie_id and r.person_id = c.person_id
+where title = 'Silver Linings Playbook';
+\end{lstlisting}
+\begin{lstlisting}
+NAME               POSITION  ROLE
+-----------------  --------  -------
+Robert De Niro     actor     Pat Sr.
+Bradley Cooper     actor     Pat
+Jacki Weaver       actor     Dolores
+Jennifer Lawrence  actor     Tiffany
+\end{lstlisting}
+So some entries in the first table are not shown because only actors have roles. In this case, using a left join will help:
+\begin{lstlisting}[language=sql]
+select name, position, role
+from people as p
+join has_position as c on p.person_id = c.person_id
+join movies as m on c.movie_id = m.movie_id
+left join plays_role as r on r.movie_id = m.movie_id and r.person_id = c.person_id
+where title = 'Silver Linings Playbook';
+\end{lstlisting}
+\begin{lstlisting}
+NAME               POSITION  ROLE
+-----------------  --------  -------
+Robert De Niro     actor     Pat Sr.
+Bruce Cohen        producer  [null]
+Bradley Cooper     actor     Pat
+Donna Gigliotti    producer  [null]
+Jonathan Gordon    producer  [null]
+David O. Russell   director  [null]
+Jacki Weaver       actor     Dolores
+Jennifer Lawrence  actor     Tiffany
+Matthew Quick      writer    [null]
+\end{lstlisting}
+Note that \verb|null| is displayed as \verb|[null]| to distinguish between the empty string and actual \verb|null|.
+\\\\
+\textbf{Select Distinct}
+
+SQL is based on multisets of records (i.e. sets containing duplicates, also called bags) so the following query will result in multiple repeated rows:
+\begin{lstlisting}[language=sql]
+select r1.role as role, m1.title as title, m1.year as year
+from plays_role as r1
+join plays_role as r2 on r2.person_id = r1.person_id
+join movies as m1 on m1.movie_id = r1.movie_id
+join movies as m2 on m2.movie_id = r2.movie_id
+join people as p on p.person_id = r1.person_id
+where p.name = 'Noomi Rapace'
+      and r1.role = r2.role
+      and m1.movie_id <> m2.movie_id
+order by m1.title, r1.role, m1.year;
+\end{lstlisting}
+\begin{lstlisting}
+ROLE              TITLE                                  YEAR
+----------------  -------------------------------------  ----
+Lisbeth Salander  The Girl Who Kicked the Hornet's Nest  2009
+Lisbeth Salander  The Girl Who Kicked the Hornet's Nest  2009
+Lisbeth Salander  The Girl Who Played with Fire          2009
+Lisbeth Salander  The Girl Who Played with Fire          2009
+Lisbeth Salander  The Girl with the Dragon Tattoo        2009
+Lisbeth Salander  The Girl with the Dragon Tattoo        2009
+\end{lstlisting}
+They keyword \verb|select distinct| collapses the repeated rows. Note that the table with repeated listings is first generated, then the repeats removed, so there is no improvement in query time (I believe?)
+\begin{lstlisting}[language=sql]
+select distinct r1.role as role, m1.title as title, m1.year as year
+from plays_role as r1
+join plays_role as r2 on r2.person_id = r1.person_id
+join movies as m1 on m1.movie_id = r1.movie_id
+join movies as m2 on m2.movie_id = r2.movie_id
+join people as p on p.person_id = r1.person_id
+where p.name = 'Noomi Rapace'
+      and r1.role = r2.role
+      and m1.movie_id <> m2.movie_id
+order by m1.title, r1.role, m1.year;
+\end{lstlisting}
+\begin{lstlisting}
+ROLE              TITLE                                  YEAR
+----------------  -------------------------------------  ----
+Lisbeth Salander  The Girl Who Kicked the Hornet's Nest  2009
+Lisbeth Salander  The Girl Who Played with Fire          2009
+Lisbeth Salander  The Girl with the Dragon Tattoo        2009
+\end{lstlisting}
+\end{document}

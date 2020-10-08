@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.8.28)  29 SEP 2020 15:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.8.28)  2 OCT 2020 07:47
 entering extended mode
-**"./Cornell CS3110.tex"
-("Cornell CS3110.tex"
+**"./Introduction to Algorithms Notes.tex"
+("Introduction to Algorithms Notes.tex"
 LaTeX2e <2020-02-02> patch level 5
 L3 programming layer <2020-06-18>
 (C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -694,68 +694,43 @@ File: tikzlibraryplotmarks.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 aryplotmarks.code.tex
 File: pgflibraryplotmarks.code.tex 2020/01/08 v3.1.5b (3.1.5b)
 )))
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
-\lst@mode=\count286
-\lst@gtempboxa=\box60
-\lst@token=\toks41
-\lst@length=\count287
-\lst@currlwidth=\dimen268
-\lst@column=\count288
-\lst@pos=\count289
-\lst@lostspace=\dimen269
-\lst@width=\dimen270
-\lst@newlines=\count290
-\lst@lineno=\count291
-\lst@maxwidth=\dimen271
-
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
-File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
-\c@lstnumber=\count292
-\lst@skipnumbers=\count293
-\lst@framebox=\box61
-)
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
-File: listings.cfg 2020/03/24 1.8d listings configuration
-))
-Package: listings 2020/03/24 1.8d (Carsten Heinz)
-
 (C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 mode.def
 File: l3backend-pdfmode.def 2020-08-07 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count294
-\l__pdf_internal_box=\box62
-) ("Cornell CS3110.aux")
-\openout1 = `"Cornell CS3110.aux"'.
+\l__kernel_color_stack_int=\count286
+\l__pdf_internal_box=\box60
+) ("Introduction to Algorithms Notes.aux")
+\openout1 = `"Introduction to Algorithms Notes.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
 
 (C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count295
-\scratchdimen=\dimen272
-\scratchbox=\box63
-\nofMPsegments=\count296
-\nofMParguments=\count297
-\everyMPshowfont=\toks42
-\MPscratchCnt=\count298
-\MPscratchDim=\dimen273
-\MPnumerator=\count299
-\makeMPintoPDFobject=\count300
-\everyMPtoPDFconversion=\toks43
+\scratchcounter=\count287
+\scratchdimen=\dimen268
+\scratchbox=\box61
+\nofMPsegments=\count288
+\nofMParguments=\count289
+\everyMPshowfont=\toks41
+\MPscratchCnt=\count290
+\MPscratchDim=\dimen269
+\MPnumerator=\count291
+\makeMPintoPDFobject=\count292
+\everyMPtoPDFconversion=\toks42
 )
 (C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -767,42 +742,25 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.17} into 
 your preamble.
- on input line 50.
+ on input line 40.
 
-\c@lstlisting=\count301
-LaTeX Font Info:    Trying to load font information for U+msa on input line 52.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 41.
 
 (C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 52.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 41.
 
 
 (C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+wasy on input line 52
+LaTeX Font Info:    Trying to load font information for U+wasy on input line 41
 .
 
 (C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/wasysym\uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
 )
-Underfull \hbox (badness 10000) in paragraph at lines 60--66
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 60--66
-
- []
-
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
-File: lstlang1.sty 2020/03/24 1.8d listings language file
-)
-Underfull \hbox (badness 10000) in paragraph at lines 76--80
-
- []
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
 Make it at least 14.49998pt.
@@ -812,205 +770,28 @@ This may cause the page layout to be inconsistent, however.
 [1
 
 {C:/Users/leeji/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 83--87
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 92--95
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 96--99
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 102--105
-
- []
-
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
-File: lstlang1.sty 2020/03/24 1.8d listings language file
-)
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang2.sty
-File: lstlang2.sty 2020/03/24 1.8d listings language file
-)
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
-File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
-)
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 111--116
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 111--116
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 126--129
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 139--142
-
- []
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 151--154
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 165--168
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 174--177
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 178--182
-
- []
-
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 187--190
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 211--214
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 226--229
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 246--249
-
- []
-
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 315--318
-
- []
-
-[7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 366--369
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 393--396
-
- []
-
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 404--407
-
- []
-
-[10] [11] [12] [13]
-Underfull \hbox (badness 10000) in paragraph at lines 556--561
-
- []
-
-[14]
-Overfull \hbox (3.36382pt too wide) in paragraph at lines 626--626
-[]\OT1/cmr/bx/n/17.28 Abstraction Func-tions and Rep-re-sen-ta-tion
- []
-
-[15] [16]
-Underfull \hbox (badness 10000) in paragraph at lines 681--684
-
- []
-
-[17] [18]
-LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 
-742.
-
-(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1cmtt.fd
-File: ts1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-)
-[19]
-Underfull \hbox (badness 10000) in paragraph at lines 770--773
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 774--777
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 778--781
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 782--786
-
- []
-
-[20] [21]
-Underfull \hbox (badness 10000) in paragraph at lines 885--888
-
- []
-
-[22]
-Underfull \hbox (badness 10000) in paragraph at lines 923--928
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 923--928
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 929--933
-
- []
-
-[23] [24]
-Underfull \hbox (badness 10000) in paragraph at lines 1009--1012
-
- []
-
-[25] [26] ("Cornell CS3110.aux") ) 
+("Introduction to Algorithms Notes.aux") ) 
 Here is how much of TeX's memory you used:
- 26518 strings out of 480790
- 641311 string characters out of 2897301
- 1277738 words of memory out of 3000000
- 42083 multiletter control sequences out of 15000+200000
- 548604 words of font info for 85 fonts, out of 3000000 for 9000
+ 24304 strings out of 480790
+ 613407 string characters out of 2897301
+ 1000671 words of memory out of 3000000
+ 39897 multiletter control sequences out of 15000+200000
+ 547838 words of font info for 82 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 68i,12n,98p,736b,1753s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\leeji\AppData\Local\MiKTeX\fonts/p
-k/ljfour/jknappen/ec/dpi600\tctt1095.pk> <C:\Users\leeji\AppData\Local\MiKTeX\f
-onts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk><C:/Users/leeji/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/leeji/AppData/
-Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/leeji
-/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Use
-rs/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb
-><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mr6.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmtt10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmtt12.pfb>
-Output written on "Cornell CS3110.pdf" (26 pages, 170361 bytes).
+ 68i,11n,98p,755b,609s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\leeji\AppData\Local\MiKTeX
+\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk><C:/Users/leeji/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/leeji/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/lee
+ji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/U
+sers/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.p
+fb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
+/cmsy10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
+sfonts/cm/cmtt12.pfb>
+Output written on "Introduction to Algorithms Notes.pdf" (1 page, 60632 bytes).
+
 PDF statistics:
- 131 PDF objects out of 1000 (max. 8388607)
+ 38 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

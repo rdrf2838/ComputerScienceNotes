@@ -88,6 +88,20 @@ Benefits of OCaml:
 	\item Functions passed as values
 	\item \textbf{Automatic type inference} - quite useful from experience
 \end{enumerate}
+\section{Before We Begin}
+You can compile OCaml programs with \verb|ocamlc| and \verb|ocamlopt|. The difference is that \verb|ocamlc| is the bytecode compiler while \verb|ocamlopt| is the native code compiler. For reference, native code is code which works only on your CPU architecture. In contrast, bytecode is CPU independent, and needs another round of parsing to become native code that runs on your computer's hardware.
+\\\\
+To compile a program, type 
+
+\verb|ocamlopt -o program.exe module1.ml module2.ml|
+\\\\
+You may also see 
+
+\verb|ocamlopt -c module1.ml module2.ml|
+
+\verb|ocamlopt -o program.exe module1.cmx module2.cmx|
+\\\\
+This just means that each module is compiled first, then linked up.
 \section{Functions}
 \textbf{Value} - expression that does not need any further evaluation
 \begin{lstlisting}[language = Caml]
@@ -434,7 +448,7 @@ val test3 : int MyStack.stack =
 \begin{itemize}
 	\item Note the \verb|module...struct| keywords; which is equivalent to classes in Java. Specifically, a module creates a new \textbf{namespace}.
 	\item In particular, you need to define the type which is needed for type inference.
-	\item Note the last 3 lines: it is not possible to push an element into the original stack, because the stack is not mutable.
+	\item Note the last 3 lines: it is not possible to push an element into the original stack, because the stack is not mutable. (If you tried to assign \verb|test1 = MyStack.push 1 test1| you would get \verb|false|! The equate sign is interpreted as checking equality.)
 \end{itemize}
 \textbf{Function Signature}
 
@@ -614,5 +628,389 @@ Not critical to the Cambridge OCaml course. Will add in later if I feel like it.
 \section{Testing}
 Not critical to the Cambridge OCaml course. Will add in later if I feel like it.
 \section{Streams and Laziness}
+It is possible to generate infinite lists, also known as streams. To not use up memory, the next item in the list is only generated when a function is evaluated.
+\begin{lstlisting}[language=Caml]
+type 'a stream =
+    Cons of 'a * (unit -> 'a stream)
+(By convention, we type stream. Not that it is not a default type.*)
+    
+let rec from n =
+  Cons(n, fun () -> from (n + 1))
+(*The anonymous function works, because functions are already values and do not get evaluated until a value is fed in. Hence, the following iterations of from (n + 1) are not evaluated.*)
 
+let nats = from 0
+let hd (Cons (h, _)) = h
+let tl (Cons (_, tf)) = tf ()
+(*To evaluate tf, we pass a unit argument, (). A function that takes a unit argument is called a thunk.*)
+
+let rec take n s =
+  if n = 0 then []
+  else hd s :: take (n - 1) (tl s)
+
+let rec drop n s =
+  if n = 0 then s
+  else drop (n - 1) (tl s)
+  
+ (*Make sure you can figure out what take and drop does.*)
+\end{lstlisting}
+We can apply operations like arithmetic and mapping to streams as though they were lists, by using the following methods:
+\begin{lstlisting}[language=Caml]
+let rec square (Cons (h, tf)) = 
+  Cons (h*h, fun () -> square (tf ()))
+
+let rec sum (Cons (h1, tf1)) (Cons (h2, tf2)) =
+  Cons (h1+h2, fun () -> sum (tf1 ()) (tf2 ()))
+  
+let rec map f (Cons (h, tf)) = 
+	Cons (f h, fun () -> map f (tf ()))
+
+let rec nats = Cons (0, fun () -> map (fun x -> x + 1) nats)
+(*This was difficult to understand; to figure this out imagine nats = [0; 1; 2; 3;...]. Then map (fun x -> x + 1) nats = [1; 2; 3; 4;...].*)
+\end{lstlisting}
+One issue with this is that \verb|fun () -> ...| is not memoized, so every time it is called the value will be recalculated. OCaml has a high-level implementation to solve this problem called \verb|Lazy|.
+\begin{lstlisting}[language=Caml]
+let x = lazy (5 + 4) ;;
+(*val x : int lazy_t = <lazy>*)
+
+Lazy.force x;;
+(*int = 9*)
+
+x;;
+(*int lazy_t = lazy 9*)
+\end{lstlisting}
+On instantiating, \verb|x| is of type \verb|int lazy_t| and returns a value of \verb|<lazy>|. We may use \verb|Lazy.force| to evaluate \verb|x|. After that, \verb|x| returns a new value, \verb|lazy 9|. This means that when \verb|x| is called again, it does not do the calculation.
+\\\\
+The lecture recommended trying to implement \verb|lazylist| for fibonacci numbers. No solution was given so here is my solution:
+\begin{lstlisting}[language=Caml]
+type 'a lazylist =
+    Cons of 'a * 'a lazylist Lazy.t;;
+    (*Lazy.t means lazy type, which is lazy_t, so you could type lazy_t instead!*)
+
+let hd (Cons (h, _)) = h;;
+
+let tl (Cons (_, tf)) = Lazy.force tf;;
+
+let rec take n s = 
+  if n = 0 then []
+  else hd s :: take (n - 1) (tl s);;
+
+let rec drop n s = 
+  if n = 0 then s
+  else drop (n - 1) (tl s);;
+
+(*both methods for sum should work*)
+let rec sum list1 list2 = 
+  Cons ((hd list1) + (hd list2), lazy (sum (tl list1) (tl list2)));; 
+
+let rec sum (Cons (h1, t1)) (Cons (h2, t2)) = 
+  Cons (h1 + h2, lazy (sum (Lazy.force t1) (Lazy.force t2)));; 
+
+let rec fibs =
+  Cons(1, lazy (
+      Cons(1, lazy (
+          sum (tl fibs) fibs))))
+    
+let fib30lazyfast = take 30 fibs
+let fib29lazyfast = take 29 fibs ;; 
+\end{lstlisting}
+\section{Balanced Trees}
+Various data structures should be able to use the following functions:
+\begin{lstlisting}[language=Caml]
+module type Set = sig
+  type 'a t
+  val empty : 'a t
+  val insert : 'a -> 'a t -> 'a t
+  val mem : 'a -> 'a t -> bool
+  (*mem stands for membership*)
+end
+
+module ListSet : Set = struct
+  ...
+end
+module BstSet : Set = struct
+  ...
+end
+module RbSet: Set = struct
+  ...
+end
+\end{lstlisting}
+\textbf{Binary Search Tree}
+\begin{lstlisting}[language=Caml]
+module BstSet = struct
+(* AF: [Leaf] represents the empty set.
+* [Node (l, v, r)] represents
+* the set $AF(l) \union {v} \union
+* AF(r)$.
+* RI: for every [Node (l, v, r)],
+* all the values in [l] are strictly less than
+* [v], and all the values in [r] are strictly
+* greater than [v]. *)
+  type 'a t =
+    | Leaf
+    | Node of 'a t * 'a * 'a t
+  let rec mem x = function
+    | Leaf -> false
+    | Node (l, v, r) ->
+        if x < v then mem x l
+        else if x > v then mem x r
+        else true
+  let rec insert x = function
+    | Leaf -> Node (Leaf, x, Leaf)
+    | Node (l, v, r) ->
+        if x < v then Node(insert x l, v, r )
+        else if x > v then Node(l, v, insert x r)
+        else Node(l, x, r )
+end
+
+let x = BstSet.Leaf;;
+let y = BstSet.insert 4 x |> BstSet.insert 5;; 
+(*val y : int BstSet.t =
+  BstSet.Node (BstSet.Leaf, 4, BstSet.Node (BstSet.Leaf, 5, BstSet.Leaf))*)
+\end{lstlisting}
+We will go through the time complexities of worst, average and best cases briefly.
+\\\\
+\textbf{Worst Case}
+
+If you insert an ascending list of numbers, the next number will always be on the right side of the previous number so you have to climb down very far - $\mathcal{O}(n)$ - to reach the leaf!
+\\\\
+\textbf{Average Case}
+
+A random set of numbers would lead to a rather 'balanced' tree. The height is $\log n$ so the time complexity is also $\mathcal{O}(\log n)$.
+\\\\
+\textbf{Best Case}
+
+If you leaf the inputs properly you will definitely be able to get a tree with height $\log n$ and time complexity of $\mathcal{O}(\log n)$.
+\\\\
+In order to ensure that the time complexity is $\mathcal{O}(\log n)$, we may balance the tree. Common data structures that implement these are:
+\begin{itemize}
+	\item 2-3 Trees: all paths have the same length
+	\item AVL Trees: length of shortest and longest path from any node differ by at most one
+	\item Red-Black Trees: length of shortest and longest path from any node differ at most by factor of two
+\end{itemize}
+\textbf{Red-Black Trees}
+\begin{itemize}
+	\item Binary search tree with each node coloured red or black (1 bit)
+	\item Conventions:
+	\begin{itemize}
+		\item Root is always black
+		\item Empty leaves are black
+	\end{itemize}
+	\item Invariants:
+	\begin{itemize}
+		\item No red node has a red child
+		\item Every path from root to leaf has the same number of black nodes
+	\end{itemize}
+	\item Thus the length of the longest path is at most twice the length of the shortest path (interleave red nodes between black nodes)
+\end{itemize}
+\textbf{Implementation}
+\begin{lstlisting}[language=Caml]
+module RbSet = struct
+  type color = Red | Blk
+  type 'a t =
+    | Leaf
+    | Node of (color * 'a t * 'a * 'a t)
+  let empty = Leaf
+  let rec mem x = function
+    | Leaf -> false
+    | Node (_, l, v, r) ->
+        if x < v then mem x l
+        else if x > v then mem x r
+        else true
+  let rec insert' x = function
+    | Leaf -> Node(Red, Leaf, x, Leaf)
+    | Node (col, l, v, r) ->
+        if x < v
+        then balance (col, (insert' x l), v, r)
+        else if x > v
+        then balance (col, l, v, (insert' x r))
+        else Node (col, l, x, r)
+  let insert x s =
+    match insert' x s with
+    | Node (_, l, v, r) -> Node(Blk, l, v, r)
+    | Leaf -> failwith "impossible"
+  let balance = function
+    | (Blk, Node (Red, Node (Red, a, x, b), y, c), z, d)
+    | (Blk, Node (Red, a, x, Node (Red, b, y, c)), z, d)
+    | (Blk, a, x, Node (Red, Node (Red, b, y, c), z, d))
+    | (Blk, a, x, Node (Red, b, y, Node (Red, c, z, d)))
+      -> Node (Red, Node (Blk, a, x, b), y, Node (Blk, c, z, d))
+    | t -> Node t
+(*pattern matching makes the reassignments so easy!*)
+\end{lstlisting}
+\textbf{2-3 Trees}
+
+Two types of nodes:
+	\begin{itemize}
+	\item 1 parent 2 children: obeys BST
+	\item 2 parents 3 children (p1 p2 c1 c2 c3):
+		\begin{itemize}
+		\item \verb|c1 < p1|
+		\item \verb|p1 <= c2 <= p2|
+		\item \verb|p2 < c3|
+		\end{itemize}
+	\end{itemize}
+\section{Mutable Data Types}
+OCaml variables are immutable, but its references, fields and arrays are mutable.
+\begin{lstlisting}[language=Caml]
+let x = ref 0;;
+val x : int ref = {contents = 0}
+(*The type of ref 0 is int ref*)
+
+x;;
+- : int ref = {contents = 0}
+!x;;
+- : int = 0
+x:=2;;
+- : unit = ()
+x;;
+- : int ref = {contents = 2}
+!x;;
+- : int = 2
+\end{lstlisting}
+The binding of \verb|x| to the pointer is immutable, but the contents of the memory may change. This is useful in implementing a counter.
+\begin{lstlisting}[language=Caml]
+let next_val =
+  let counter = ref 0
+  in fun () ->
+    incr counter;
+    !counter
+\end{lstlisting}
+References may have aliases, i.e. another variable that points to the same location in memory. So if the value stored in that location changes, both variables when dereferenced will point to the new value.
+\begin{lstlisting}[language=Caml]
+let r1 = ref 3110;;
+let r2 = ref 3110;;
+r1 == r2;; (*false*)
+r1 = r2;; (*true*)
+\end{lstlisting}
+\verb|==| tests for physical equality, i.e. if the pointers point to the same memory location. \verb|=| tests for structural equality, i.e. if the value they point to is the same. Most of the time you only need to compare values with structural inequality. 
+\\\\
+\textbf{Mutable Fields}
+\begin{lstlisting}[language=Caml]
+# type point = {x:int; y:int; mutable c:string};;
+type point = {x:int; y:int; mutable c:string; }
+# let p = {x=0; y=0; c="red"};;
+val p : point = {x=0; y=0; c="red"}
+# p.c <- "white";;
+- : unit = ()
+# p;;
+val p : point = {x=0; y=0; c="white"}
+# p.x <- 3;;
+\end{lstlisting}
+With this, we realise that refs are just implementations of mutables.
+\begin{lstlisting}[language=Caml]
+type 'a ref = { mutable contents: 'a }
+let ref x = { contents = x }
+let ( ! ) r = r.contents
+let ( := ) r newval = r.contents <- newval
+\end{lstlisting}
+\textbf{Arrays}
+
+Quick note: arrays are not lists!
+\begin{lstlisting}[language=Caml]
+# let v = [|0.; 1.|];;
+val v : float array = [|0.; 1.|]
+# v.(0) <- 5.;;
+- : unit = ()
+# v;;
+- : float array = [|5.; 1.|]
+
+while e1 do e2 done
+for x=e1 to e2 do e3 done
+for x=e1 downto e2 do e3 done
+(*loops are back!*)
+\end{lstlisting}
+\section{Interpreters}
+Compilers compile the source into the target program, before the target program can take in inputs and produce outputs. Interpreters can take in both the source program and inputs while producing outputs.
+\\\\
+This leads to possibly better error messages and better debuggers.
+\\\\
+\textbf{Mixed Compilation and Interpretation}
+
+Source program compiles into an intermediate program. Then a virtual machine can take in the intermediate program and input while producing outputs.
+\\\\
+\textbf{Architecture}
+	\begin{itemize}
+	\item Front end: translate source code into abstract syntax trees (AST)
+	\item Back end: translate AST into machine code
+	\end{itemize}
+Front end involves:
+	\begin{itemize}
+	\item Lexical analysis with lexer
+	\item Syntactic analysis with parser
+	\item Semantic analysis
+	\end{itemize}
+Functional languages are well-suited to implement compilers and interpreters
+	\begin{itemize}
+	\item Recursive functions can be converted into ASTs
+	\item Recursive functions can be used to interpret ASTs
+	\end{itemize}
+To interpret the following AST \verb|Add (Int 5) (Add (Int 6) (Int 7))| We can use the following code:
+\begin{lstlisting}[language=Caml]
+type expr =
+  | Int of int
+  | Add of expr * expr
+           
+let rec eval e =
+  if is_value e
+  then e
+  else eval (step e)
+      
+let is_value = function
+  | Int _ -> true
+  | Add _ -> false
+    
+let rec step = function
+  | Int n -> failwith "Does not step"
+  | Add(Int n1, Int n2) -> Int (n1+n2)
+  | Add(Int n1, e2) -> Add(Int n1, step e2)
+  | Add(e1, e2) -> Add(step e1, e2)
+\end{lstlisting}
+Another example: \verb|let x = 5 in x + 1|, which is equivalent to 
+
+\verb|Let "x" (Int 5) (Add (Var "x") (Int 1))|
+\begin{lstlisting}[language=Caml]
+type expr =
+  | Int of int
+  | Add of expr * expr
+  | Var of string
+  | Let of string * expr * expr
+           
+let rec eval e =
+  if is_value e
+  then e
+  else eval (step e)
+let is_value = function
+  | Int _ -> true
+  | Add _ | Var _ | Let _ -> false
+    
+  (* [subst e v x] is e{v/x}, that is,
+* [e] with [v] substituted for [x]. *)
+let rec subst e v x = match e with
+  | Var y -> if x=y then v else e
+  | Int n -> Int n
+  | Add(el,er) ->
+      Add(subst el v x, subst er v x)
+  | Let(y,ebind,ebody) ->
+      let ebind'
+        = subst ebind v x in
+      if x=y
+      then Let(y, ebind', ebody)
+      else Let(y, ebind', subst ebody v x)
+
+let rec step = function
+  | Int n -> failwith "Does not step"
+  | Add(Int n1, Int n2) -> Int (n1 + n2)
+  | Add(Int n1, e2) -> Add (Int n1, step e2)
+  | Add(e1, e2) -> Add (step e1, e2)
+  | Var _ -> failwith "Unbound variable"
+  | Let(x, Int n, e2) -> subst e2 (Int n) x
+  | Let(x, e1, e2) -> Let (x, step e1, e2)
+  \end{lstlisting}
+ After all this work we can finally interpret 2 syntax trees...
+ \\\\
+ Btw the following sections are beyond Cambridge's OCaml syllabus so I will not make notes for them yet (This is a 3rd/4th year Cornell course!)
+ \section{The Substitution Model}
+ \section{The Environment Model}
+ \section{Futures}
+ \section{Monads}
 \end{document}

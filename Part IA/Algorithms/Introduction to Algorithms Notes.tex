@@ -1,0 +1,68 @@
+%\documentclass[twocolumn,preprintnumbers,superscriptaddress]{revtex4-2}
+%\documentclass[aps,preprint]{revtex4-2}
+\documentclass[12pt,a4paper]{article} % uncomment, if revtex is not installed
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{wasysym}
+\usepackage{natbib}
+\usepackage{fixmath}
+\usepackage{comment}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+\pagestyle{fancyplain}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\fancyhf{}
+
+\lhead{ \fancyplain{}{Ivin Lee, il315@cam.ac.uk} }
+\rhead{ \fancyplain{}{Introduction to Algorithms}}
+\cfoot{ \fancyplain{}{\thepage{}} }
+
+\newcommand{\snt}[1]{\textcolor{magenta}{#1}} % edited by Sergei 
+\newcommand{\crsid}[1]{\textcolor{red}{#1}} % edited by crsid
+\newcommand{\sntdel}[1]{\textcolor{green}{\sout{#1}}} % deleted by Sergei
+
+\newcommand{\problem}[1]{\subsection*{#1}
+\setcounter{equation}{0}}
+\newcommand{\question}[1]{\problem{Q. #1}}
+\newcommand{\pproblem}[1]{\subsubsection*{(#1)}}
+
+\author{Ivin Lee}
+\title{Introduction to Algorithms (CLRS)}
+
+\begin{document}
+\maketitle
+\section{Sorting and Order Statistics}
+	\subsection{Heapsort}
+	Binary heap
+		\begin{itemize}
+		\item stores binary tree in an array (index 0 not filled)
+		\item uses bitshift operations to traverse which are fast
+		\end{itemize}
+	Heap property
+		\begin{itemize}
+		\item the children of every node are smaller than the node
+		\item \verb|max-heapify| has the recurrence relation $T(n) \leq T(2n/3)+\mathcal{O}(1)$
+		\item By master theorem its complexity is $\mathcal{O}(\lg n)$
+		\end{itemize}
+	Building a heap
+		\begin{itemize}
+		\item call \verb|max-heapify| over the first half of the array/top half of the binary tree
+		\item time complexity of $\mathcal{O}(n)$, derivable using summation
+		\end{itemize}
+	Heapsort algorithm
+		\begin{itemize}
+		\item since the biggest element is at the top of the binary tree, we can move it to the end of the array and decrease the heap size by 1 so \verb|max-heapify| still works (so length $\neq$ heap-size!)
+		\end{itemize}then just keep repeating
+	Priority queues
+		\begin{itemize}
+		
+		\end{itemize}
+\end{document}

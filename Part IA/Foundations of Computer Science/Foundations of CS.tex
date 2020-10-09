@@ -1,0 +1,61 @@
+\documentclass[12pt,a4paper]{article} % uncomment, if revtex is not installed
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{wasysym}
+\usepackage{natbib}
+\usepackage{fixmath}
+\usepackage{comment}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+\usepackage{listings}
+\pagestyle{fancyplain}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+\fancyhf{}
+\setlength{\parindent}{0in}
+\lstset{
+tabsize = 4, %% set tab space width
+showstringspaces = false, %% prevent space marking in strings, string is defined as the text that is generally printed directly to the console
+numbers = left, %% display line numbers on the left
+commentstyle = \color[rgb]{0,0.5,0}, %% set comment color
+keywordstyle = \color{blue}, %% set keyword color
+stringstyle = \color{red}, %% set string color
+rulecolor = \color{black}, %% set frame color to avoid being affected by text color
+basicstyle = \small \ttfamily , %% set listing font and size
+breaklines = true, %% enable line breaking
+numberstyle = \tiny,
+}
+
+\lhead{ \fancyplain{}{Ivin Lee, il315@cam.ac.uk} }
+\rhead{ \fancyplain{}{NST Math 2016}}
+\cfoot{ \fancyplain{}{\thepage{}} }
+
+\newcommand{\snt}[1]{\textcolor{magenta}{#1}} % edited by Sergei 
+\newcommand{\crsid}[1]{\textcolor{red}{#1}} % edited by crsid
+\newcommand{\sntdel}[1]{\textcolor{green}{\sout{#1}}} % deleted by Sergei
+
+\newcommand{\problem}[1]{\subsection*{#1}
+\setcounter{equation}{0}}
+\newcommand{\question}[1]{\problem{Q. #1}}
+\newcommand{\pproblem}[1]{\subsubsection*{(#1)}}
+
+\author{Ivin Lee}
+\title{NST Math 2016 Solutions}
+
+\begin{document}
+\section{Lecture 1}
+Using OCaML - ignore underlying system and focus on core concepts
+\\\\
+Expressions giving rise to values - computers as theoretical constructs
+\begin{itemize}
+\item Values are immutable
+\item functions can't have side effects
+\end{itemize}
+\end{document}

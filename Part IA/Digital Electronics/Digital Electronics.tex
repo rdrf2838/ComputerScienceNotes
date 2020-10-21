@@ -1,0 +1,243 @@
+%\documentclass[twocolumn,preprintnumbers,superscriptaddress]{revtex4-2}
+%\documentclass[aps,preprint]{revtex4-2}
+\documentclass[12pt,a4paper]{article} % uncomment, if revtex is not installed
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{wasysym}
+\usepackage{natbib}
+\usepackage{fixmath}
+\usepackage{comment}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+\pagestyle{fancyplain}
+\usepackage{graphicx}
+\usepackage{listings}
+\graphicspath{ {./} }
+\fancyhf{}
+
+\lhead{ \fancyplain{}{Ivin Lee, il315@cam.ac.uk} }
+\rhead{ \fancyplain{}{}}
+\cfoot{ \fancyplain{}{\thepage{}} }
+
+\newcommand{\problem}[1]{\subsection*{#1}
+\setcounter{equation}{0}}
+\newcommand{\question}[1]{\problem{Q. #1}}
+\newcommand{\pproblem}[1]{\subsubsection*{(#1)}}
+\lstset{
+tabsize = 4, %% set tab space width
+showstringspaces = false, %% prevent space marking in strings, string is defined as the text that is generally printed directly to the console
+numbers = left, %% display line numbers on the left
+commentstyle = \color[rgb]{0,0.5,0}, %% set comment color
+keywordstyle = \color{blue}, %% set keyword color
+stringstyle = \color{red}, %% set string color
+rulecolor = \color{black}, %% set frame color to avoid being affected by text color
+basicstyle = \small \ttfamily , %% set listing font and size
+breaklines = true, %% enable line breaking
+numberstyle = \tiny,
+}
+\author{Ivin Lee}
+\title{Digital Electronics}
+\begin{document}
+\maketitle
+\section{Combinatorial Logic}
+\subsection{Logic Gates}
+\begin{itemize}
+\item NOT 
+\item AND
+\item OR
+\item XOR
+\item NAND
+\item NOR
+\end{itemize}
+\subsection{Boolean Algebra}
+\begin{itemize}
+\item Commutation
+	\begin{itemize}
+	\item $a + b = b + a$
+	\item $a.b = b.a$
+	\end{itemize}
+\item Association
+	\begin{itemize}
+	\item $(a+b)+c = a+(b+c)$
+	\item $(a.b).c = a.(b.c)$
+	\end{itemize}
+\item Distribution
+	\begin{itemize}
+	\item $a.(b+c+...) = (a.b)+(a.c)+...$
+	\item $a+(b.c....) = (a+b).(a+c)....$
+	\end{itemize}
+\item Absorption
+	\begin{itemize}
+	\item $a+(a.c) = a$
+	\item $a.(a+c) = a$
+	\end{itemize}
+\item DeMorgan's Theorems
+	\begin{itemize}
+	\item $\overline{a+b+c} = \overline{a}.\overline{b}.\overline{c}$
+	\item $\overline{a.b.c} = \overline{a}+\overline{b}+\overline{c}$
+	\end{itemize}
+\end{itemize}
+The DeMorgan's Theorems can be used to make circuits that only use NAND or NOR gates.
+\begin{itemize}
+\item $f=a.b.\overline{c}+\overline{a}.b.c = \overline{\overline{a.b.\overline{c}}.\overline{\overline{a}.b.c}}$
+\end{itemize}
+\subsection{Disjunctive Normal Form}
+\begin{align}
+f=\overline{x}.\overline{y}.\overline{z}+\overline{x}.\overline{y}.z+\overline{x}.y.\overline{z}+\overline{x}.y.z+x.y.z
+\end{align}
+Each term is called a \textbf{minterm}, which must contain all variables
+\\\\
+A Boolean function expressed as the
+disjunction (ORing) of its minterms is said
+to be in the Disjunctive Normal Form (DNF)
+\\\\
+A Boolean function expressed as the
+ORing of ANDed variables (not necessarily
+minterms) is often said to be in Sum of
+Products (SOP) form
+\subsection{Conjunctive Normal Form}
+\textbf{maxterm}: $(x+y+z)$
+\\\\
+Write 
+\begin{align*}
+\overline{f} = x.\overline{y}.\overline{z}+x.\overline{y}.z+x.y.\overline{z}
+\end{align*}
+Applying DeMorgan twice gives
+\begin{align*}
+f=(\overline{x}+y+z).(\overline{x}+y+\overline{z}).(\overline{x}+\overline{y}+z)
+\end{align*}
+This is the conjunctive normal form.
+\\\\
+A Boolean function expressed as the ANDing
+of ORed variables (not necessarily maxterms)
+is often said to be in Product of Sums (POS)
+form
+\subsection{Karnaugh Mapping}
+Visual way of identifying minterms
+\begin{itemize}
+\item Group minterms with value 1 for sum of products
+\item group minterms with value 0 for product of sums
+\end{itemize}
+Definitions
+\begin{itemize}
+\item Cover: a term covers a minterm if that minterm is part of the term
+\item Prime Implicant: a term that cannot be further combined
+\item Essential Prime Implicant: a prime implicant that covers a minterm that no other prime implicant covers
+\item Covering Set: minimum set of prime implicants which includes all essential terms plus any other prime implicants required to cover all the minterms
+\end{itemize}
+\subsection{Quine-McCluskey Method}
+Steps
+\begin{itemize}
+\item List all the minterms, ordered by bitcount
+\item Find adjacent terms that differ by 1 bit - adjacent minterms, and the ones that aren't a subset of others are prime implicants
+\end{itemize}
+\subsection{Binary Adders}
+Making a binary adder just using full adders results in a long delay before the result can be obtained, because it takes time to spit out the carry bit and feed into the next full adder
+\\\\
+We can calculate each carry bit independently from the binary inputs and the first carry input
+\\\\
+In practice, we have 4-bit adder blocks where within the block, ripple carry adders are used for the carry bit, but the last carry bit is calculated separately
+\\\\
+The time taken for the last carry bit to be calculated is roughly equal to the time taken for the other outputs
+\\\\
+Basically two parallel tasks instead of one task
+\subsection{Combinatorial Logic Design}
+\subsubsection{Multilevel Logic}
+\begin{itemize}
+\item We can always use '2-level' logic implementations from sum-of-products/product-of-sums
+\item However it may be unwise to use this implementation
+	\begin{itemize}
+	\item Commercially available logic gates usually only have 2-3 inputs
+	\item Reduce system complexity
+	\item Reduces the number of literals (total number of times that variables appear in expression)	
+	\end{itemize}
+\end{itemize}
+\subsubsection{Gate Propagation Delay}
+\begin{itemize}
+\item Due to the finite switching speed of gates
+\item Hazards: unwanted brief logic level changes
+	\begin{itemize}
+	\item Static hazards: momentary change in value of output when it is supposed to be unchanged
+	\item Dynamic hazard: output changes more than once when it is supposed to change just once
+	\end{itemize}
+\end{itemize}
+You can demonstrate hazard formation by using \verb|NOT| gates to delay a signal
+\\\\
+To remove hazards, draw the K-map of the output, and add another term that overlaps the essential terms
+\section{Sequential Logic}
+Use of memory elements to store previous state
+\subsection{RS Latch}
+Set, reset and hold conditions
+\\\\
+We can create a state transition table based on the Q, R and S values, get the equations for each state transition, and then draw a state diagram.
+\\\\
+An RS latch is asynchronous, but most sequential circuits use synchronous operation. This means the output either changes when the clock signal is 1, or when the clock signal turns 1.
+\subsection{Transparent D Latch}
+\begin{itemize}
+\item Use of $D$ and $\overline{D}$ to prevent reaching the invalid state
+\item Use of enable signal to turn either inputs off or on
+\end{itemize}
+\subsection{Master Slave Flip Flops}
+\begin{itemize}
+\item The transparent D latch is 'level' triggered, but it is more simple to design circuits when the outputs change on the rising edge of the clock signal.
+\item Combine 2 transparent D latches into a Master-Slave configuration
+\item \begin{itemize}
+\item When the clock signal is off, the value to change to is stored by the master latch
+\item When the clock signal is turned on, the master latch remembers the signal, so even though the slave latch can change its output, it reads the same input so the value is fixed.
+\item This cycle repeats
+\end{itemize}
+\end{itemize}
+The master-slave configuration has been superceded by new flip flop circuits which are easier to implement and hvae better performance
+\subsection{JK Flip Flops}
+Illegal state is replaced by a toggle state
+\subsection{T Flip Flops}
+Only two states: hold and toggle
+\\\\
+All these circuits have additional override inputs to reset/set output values, and these are mainly used to force circuits into a known state, say at start-up.
+\subsection{Timings}
+\begin{itemize}
+\item Setup time: minimum duration that the data must be stable at the input before the clock edge
+\item Hold time: the minimum duration that the data must remain stable on the input after the clock edge -- takes some time for the circuit to realise that the clock has turned off and to stop reading input
+\end{itemize}
+\subsection{Flip Flop Applications}
+\begin{itemize}
+\item Counters
+\item Memory
+	\begin{itemize}
+	\item parallel to serial conversion
+	\item serial to parallel conversion
+	\item together, serial data communication system
+	\end{itemize}
+\end{itemize}
+\subsection{Counters}
+\subsubsection{Ripple Counters}
+The output of one flip flop is input as the clock signal for the next flip flop. 
+\\\\
+Flip flops are triggered on the leading edge of the clock signal so every flip flop causes the signal's frequency to decrease by 2
+\\\\
+However due to timing delays, it is not possible to know when the output for the ripple counter is valid, leading to miscounting.
+\\\\
+To count to a specific value, we can link the end value to a reset input for the flip flops, i.e. when the flip flop counter has reached the required value, we reset it back to 0.
+\subsection{Synchronous Counters}
+All the flip flop clock inputs are directly connected to the clock signal and change their output at the same time.
+\\\\
+However more complex combinatorial logic is required to generate the output
+\\\\
+Design process:
+\begin{enumerate}
+\item Characteristic table: given the current output and current inputs, what is the next output
+\item Excitation table: given the current output and the desired next output, what should the current inputs be
+\item Modified state transition table: given the current state and next state, what are all the inputs
+\item Derive boolean formula for the inputs from the current state using boolean algebra, k-maps etc
+\item If there are some current states that aren't used, can add them as don't care states
+\end{enumerate}
+\subsection{Shift Register}
+Implemented using a chain of flip flops
+\end{document}

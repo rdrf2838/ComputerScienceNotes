@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.8.28)  9 OCT 2020 20:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.8.28)  21 OCT 2020 10:53
 entering extended mode
 **"./Foundations of CS.tex"
 ("Foundations of CS.tex"
@@ -724,8 +724,7 @@ mode.def
 File: l3backend-pdfmode.def 2020-08-07 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count294
 \l__pdf_internal_box=\box62
-)
-No file "Foundations of CS".aux.
+) ("Foundations of CS.aux")
 \openout1 = `"Foundations of CS.aux"'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
@@ -772,7 +771,7 @@ your preamble.
 
 \c@lstlisting=\count301
 
-Underfull \hbox (badness 10000) in paragraph at lines 54--58
+Underfull \hbox (badness 10000) in paragraph at lines 80--83
 
  []
 
@@ -785,22 +784,102 @@ This may cause the page layout to be inconsistent, however.
 [1{C:/Users/leeji/AppData/Local/MiKTeX/pdftex/config/pdftex.map}
 
 ]
-("Foundations of CS.aux") ) 
+LaTeX Font Info:    Trying to load font information for U+msa on input line 91.
+
+
+(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 91.
+
+
+(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for U+wasy on input line 91
+.
+
+(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/wasysym\uwasy.fd
+File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
+)
+(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang2.sty
+File: lstlang2.sty 2020/03/24 1.8d listings language file
+)
+(C:\Users\leeji\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+)
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 142--148
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--148
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--148
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--148
+
+ []
+
+[3] [4]
+Underfull \hbox (badness 10000) in paragraph at lines 197--200
+
+ []
+
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 214--217
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 230--233
+
+ []
+
+[6] [7] [8] [9]
+Underfull \hbox (badness 10000) in paragraph at lines 380--385
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 380--385
+
+ []
+
+[10] [11] ("Foundations of CS.aux") ) 
 Here is how much of TeX's memory you used:
- 25534 strings out of 480790
- 630696 string characters out of 2897301
- 999657 words of memory out of 3000000
- 41156 multiletter control sequences out of 15000+200000
- 533579 words of font info for 28 fonts, out of 3000000 for 9000
+ 26125 strings out of 480790
+ 637078 string characters out of 2897301
+ 1218389 words of memory out of 3000000
+ 41701 multiletter control sequences out of 15000+200000
+ 542594 words of font info for 62 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 68i,11n,98p,739b,609s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\leeji\AppData\Local\MiKTeX\fonts/pk/ljfou
-r/jknappen/ec/dpi600\tcrm1200.pk><C:/Users/leeji/AppData/Local/Programs/MiKTeX/
-fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/leeji/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on "Foundations of CS.pdf" (1 page, 27479 bytes).
+ 68i,12n,98p,739b,1749s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\leeji\AppData\Local\MiKTeX\font
+s/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk><C:/Users/leeji/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/leeji/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/leeji/Ap
+pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/
+leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:
+/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.
+pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmsy10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmsy8.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmtt10.pfb><C:/Users/leeji/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on "Foundations of CS.pdf" (11 pages, 131889 bytes).
 PDF statistics:
- 22 PDF objects out of 1000 (max. 8388607)
+ 83 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -17,6 +17,8 @@
 \usepackage{listings}
 \pagestyle{fancyplain}
 \usepackage{graphicx}
+\usepackage{float}
+
 \graphicspath{ {./} }
 \fancyhf{}
 \setlength{\parindent}{0in}
@@ -52,8 +54,8 @@ numberstyle = \tiny,
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \maketitle
-\section{Lecture 1}
-\textbf{Database Systems in course}
+\section{Introduction}
+\subsection{Database Systems in course}
 	\begin{itemize}
 	\item HyperSQL
 	\item DOCtor Who
@@ -63,8 +65,7 @@ numberstyle = \tiny,
 
 This course will deal with Database Management Systems from the perspective of an application developer, and will teach the interfaces of these systems.
 \\\\
-\textbf{Database Management System}
-
+\subsection{Database Management System}
 Implements CRUD operations
 	\begin{itemize}
 	\item Create
@@ -79,24 +80,23 @@ Implements ACID transactions for concurrent updates
 	\item Isolation: every transaction happens independently of other transactions: allows for concurrency
 	\item Durability: if transaction happens successfully, then its effects will persist
 	\end{itemize}
-\textbf{SQL}
 
+\subsection{SQL}
 HyperSql - just a java file, overhead of using is low
 \\\\
-\textbf{NoSQL}
-
+\subsection{NoSQL}
 Not only SQL - non-relational, distributed, open-source, horizontally scalable.
 	\begin{itemize}
 	\item Scalability: data stored on multiple machines
 	\item Fault Tolerance: service can survive failure of some machines
 	\item Lower Latency: data located closer to widely distributed users
 	\end{itemize}
-\textbf{Distributing Data}
+\subsection{Distributing Data}
 	\begin{itemize}
 	\item Replication
 	\item Partitioning
 	\end{itemize}
-\textbf{CAP Concepts}
+\subsection{CAP Concepts}
 	\begin{itemize}
 	\item Consistency: all reads return data up-to-date
 	\item Availability: all clients can fine some replica of the data
@@ -104,7 +104,7 @@ Not only SQL - non-relational, distributed, open-source, horizontally scalable.
 	\end{itemize}
 Cannot achieve all of these, some balance.
 \\\\
-\textbf{CAP Principle}
+\subsection{CAP Principle}
 
 In a highly distributed system, 
 	\begin{itemize}
@@ -114,7 +114,7 @@ In a highly distributed system,
 	\end{itemize}
 Eventual consistency - if update activity ceases, then the system will reach a consistent state.
 \\\\
-\textbf{BASE}
+\subsection{BASE}
 	\begin{itemize}
 	\item BA: basically available
 	\item S: soft state
@@ -122,11 +122,222 @@ Eventual consistency - if update activity ceases, then the system will reach a c
 	\end{itemize}
 This is an area of ongoing research.
 \\\\
-\textbf{Polyglot Persistence}
+\subsection{Polyglot Persistence}
 
 Using various Database Management Systems to manage different sets of data
 \\\\
 Conclusion: there will be a lot of changes in Database Management Systems.
+\section{Entity-Relationship Diagrams}
+\begin{itemize}
+\item Entities (squares): nouns of the model
+	\begin{itemize}
+	\item Weak entities: 
+		\begin{itemize}
+		\item existence depends on existence of another entity
+		\end{itemize}
+	\item Sub-entities: inherit all attributes of the parent entity
+	\end{itemize}
+\item Attributes(ovals): represent properties
+\item Key (underlined): attribute whose value uniquely identifies an entity instance
+\item Relationship (diamond): verbs, relation between entities
+	\begin{itemize}
+	\item Cardinality:
+		\begin{itemize}
+		\item one-to-many: arrow to one
+		\item many-to-one
+		\item many-to-many
+		\item one-to-one
+		\end{itemize}
+	\item May also have attributes
+	\item Can be more than 2 parties, i.e. ternary relationship
+	\end{itemize}
+\end{itemize}
+\section{Relational Algebra}
+This will probably clash with the lectures on discrete mathematics but I'll still type them here
+\subsection{Mathematical Relations}
+Suppose S and T are sets. The Cartesian product is the set
+\begin{align*}
+S\times T=\{(s,t)|s\in S,t\in T\}
+\end{align*}
+A binary relation over $S\times T$ is any set $R$ with
+\begin{align*}
+&R\subseteq S\times T\\
+\iff&(s,t)\in R\\
+\iff& sRt
+\end{align*}
+S and T are domains. We are interested in finite relations R that can be stored.
+\\\\
+n-ary relations
+\begin{align*}
+R\subseteq S_1\times S_2\times...\times S_n=\{(s_1,s_2,...s_n)|s_i\in S_i\}
+\end{align*}
+Each relation is a row in a table. We can pair the column name (attribute name) with each element of $S_i$, so we can tell that a value $6$ in an element of a relation refers to, say, \verb|age: 6| or \verb|height: 6|. This way, column order doesn't matter.
+\\\\
+A database relation R is a finite set
+\begin{align*}
+R\subseteq \{\{(A_1,s_1),(A_2,s_2),...,(A_n,s_n)\}|s_i\in S_i\}
+\end{align*}
+We specify $R$'s schema as $R(A_1:S_1, A_2:S_2,...,A_n:S_n)$. Each element of $R$ is a \textbf{record}. Each $S_n$ could be a \verb|string|, \verb|integer| etc.
+\subsection{Database Query Language}
+Input: a collection of relation instances
+
+Output: a single relation instance
+\begin{align*}
+R_1,R_2,...,R_k\Rightarrow Q(R_1,R_2,...,R_k)
+\end{align*}
+\subsection{Relational Algebra}
+\begin{table}[H]
+\begin{tabular}{lcrr}
+Q & ::= & R             & base relation \\
+  & |   & $\sigma_p(Q)$ & selection     \\
+  & |   & $\pi_X(Q)$    & projection    \\
+  & |   & $Q\times Q$   & product       \\
+  & |   & $Q-Q$         & difference    \\
+  & |   & $Q\cup Q$     & union         \\
+  & |   & $Q\cap Q$     & intersection  \\
+  & |   & $\rho_M(Q)$   & renaming     
+\end{tabular}
+\end{table}
+$X=\{A_1, A_2, ...,A_k\}$ is a set of attributes.
+
+$M=\{A_1\mapsto B_1,A_2\mapsto B_2,...,A_k\mapsto B_k\}$ is a renaming map
+\\\\
+A query must be well-formed: all column names must be distinct
+\subsubsection{Selection}
+Selecting one row:
+\\\\
+$\sigma_{A>12}(R)$
+
+\verb|select distinct * from R where R.A > 12|
+\\\\
+Reason for \verb|distinct| is because SQL works with multisets so to follow set properties we need to use it. The choice of multisets is because there may be times when we need to sum these values, so we need to preserve duplicates.
+\subsubsection{Projection}
+Selecting multiple columns
+
+$\pi_{B,C}(R)$
+
+\verb|select distinct B, C from R|
+\subsubsection{Renaming}
+$\rho_{\{B\mapsto E,D\mapsto F\}}(R)$
+
+\verb|select A, B as E, c, D as F from R|
+\subsubsection{Union}
+$R\cup S$
+
+\verb|(select * from R) union (select * from S)|
+\subsubsection{Intersection}
+$R\cap S$
+
+\verb|(select * from R) intersect (select * from S)|
+
+\subsubsection{Difference}
+$R - S$
+
+\verb|(select * from R) except (select * from S)|
+\subsubsection{Product}
+$R\times S$
+
+\verb|select A, B, C, D from R cross join S|
+
+\verb|select A, B, C, D from R, S|
+
+Note that after crossing, the pair of pairs is flattened
+\subsubsection{Natural Join}
+\textbf{Notation}
+
+Relational Schema: $R(A)$, where $A=\{A_1, A_2, ...,A_n\}$ are the attribute names.
+
+$R(A,B)$ means $R(A\cup B)$ and $A\cap B=\phi$
+
+$u.[A]=v.[A]$ abbreviates $(u.A_1=v.A_1)\land...\land (u.A_n=v.A_n)$
+\\\\
+Given $R(A,B)$ and $S(B,C)$, we define natural join as a relation over attributes $A, B, C$ as
+\begin{align*}
+R\bowtie S\equiv \{t|\exists u\in R,v\in S,u.[B]=v.[B]\land t=u.[A]\cup u.[B] \cup v.[C]\}\\
+R\bowtie S=\pi_{A,B,C}(\sigma_{B=B'}(R\times\rho_{B\mapsto B'}(S)))
+\end{align*}
+So natural join is a composite function.
+\section{Implementing ER with SQL}
+The entity-relationship model does not dictate implementation. However some methods are better than others...
+\\\\
+Lumping all data in one big table leads to:
+\begin{itemize}
+\item Insertion anomalies: 
+	\begin{itemize}
+	\item if some of the columns of the data to be inserted are supposed to have the same values as some of the columns in the table already, how do we check if they are the same?
+	\item Insert data where some columns are empty
+	\end{itemize}	 
+\item Deletion anomalies:
+	\begin{itemize}
+	\item deleting a row will delete more information than we should
+	\item the other method is to make those columns null
+	\end{itemize}
+\item Update anomalies: 
+	\begin{itemize}
+	\item Many rows to update if the rows share some column values
+	\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item a transaction might take very long are it needs to scan through multiple rows when information is duplicated in the table (i.e. checks for correctness)
+\item this database cannot support many concurrent updates
+\end{itemize}
+A better idea is to break tables down, having tables for both entities and relationships. Then to retrieve the table, we can join the smaller tables up.
+\begin{itemize}
+\item Upside: reduce update anomalies
+\item Downside: a lot of effort to combine information when making queries
+\end{itemize}
+\subsection{Keys}
+To make sure that the relational implementation is correct, we can use keys and foreign keys.
+\\\\
+Suppose $R(X)$ is a relational schema with $Z\subseteq X$. If for any records $u$ and $v$ in any instance of $R$ we have
+\begin{align}
+u.[Z]=v.[Z]\Rightarrow u.[X]=v.[X]
+\end{align}
+(i.e. Z uniquely identifies a single record), then Z is a superkey for R. If no proper subset of Z is a superkey, (i.e. Z is the smallest combination of attributes needed to uniquely identify a record), then Z is a key for R. We write $R(\underline{Z},Y)$ to indicate that Z is a key for $R(Z\cup Y$).
+\\\\
+Suppose we have $R(\underline{Z},Y)$. Furthermore, let $S(W)$ be a relational schema with $Z\subseteq W$. We say that Z represents a foreign key in S for R if for any instance we have $\pi_Z(S)\subseteq \pi_Z(R)$ (i.e. all records of attribute Z in S point to a record with the same attribute Z in R).
+\\\\
+A database is said to have referential integrity when all foreign key constraints are satisfied.
+\\\\
+\begin{lstlisting}[language=sql]
+create table genres (
+	genre_id integer NOT NULL,
+	genre varchar(100) NOT NULL,
+	PRIMARY KEY (genre_id));
+
+create table has_genre (
+	movie_id varchar(16) NOT NULL
+		REFERENCES movies (movie_id),
+	genre_id integer NOT NULL
+		REFERENCES genres (genre_id),
+	PRIMARY KEY (movie_id, genre_id));
+\end{lstlisting}
+SQL allows you to specify these constraints, and will prevent any violations of referential integrity (i.e. preventing you from deleting a row with a primary key when another table references that primary key as a foreign key)
+\subsection{Implementing Relationships}
+\begin{itemize}
+\item Many to many: $R(\underline{X,Z},U)$
+\item one to many: $R(\underline{X},Z,U)$
+\item many to one: $R(X, \underline{Z}, U)$
+\end{itemize}
+In a many to many relationship, it is intuitive that you can identify each record only you have the details of X and Z.
+\\\\
+In a one to many relationship (i.e. one department to many employees), then for each employee the department may be repeated so only the employee's identification should be a primary key.
+\\\\
+Following the previous example, we might want to include the relationship between employees and departments into the table for employees. This is especially so if the entity is a weak entity.
+\begin{itemize}
+\item Pros: Less complex queries
+\item Cons: If the schema needs to change (i.e. one to many to many to many) migration is needed, instead of just needing to add more records to the relationship table.
+\end{itemize}
+Multiple relationships in a single table
+\\\\
+If S and T are related by 2 relationships, a workaround could be to have one relationship table, with an indicator variable to specify whether we are referring to the first or second relationship. Then we have 2 more columns, one of them null and the other is the value of the correct relationship.
+\begin{align}
+\text{Instead of:}\\
+R(\underline{X,Z},U)\\
+Q(\underline{X,Z},V)\\
+\text{We could have:}\\
+RQ(\underline{X,Z,type}, U, V)
+\end{align}
 \section{SQL Commands}
 \textbf{Aggregate Commands}
 \begin{lstlisting}[language=SQL]

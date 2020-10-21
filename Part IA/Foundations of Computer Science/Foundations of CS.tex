@@ -50,12 +50,419 @@ numberstyle = \tiny,
 \title{NST Math 2016 Solutions}
 
 \begin{document}
-\section{Lecture 1}
-Using OCaML - ignore underlying system and focus on core concepts
+\section{Introduction}
+\subsection{Basic Concepts in Computer Science}
+Computers are extremely complex, so we need different levels of abstraction.
+
+We can split computers into levels for simplicity, resulting in the following challenges:
+\begin{itemize}
+\item what services to provide at each level
+\item hot to implement them using lover-level services
+\item the interface between the current level and the bottom/top levels
+\item there should not be any access across multiple layers, allowing each layer to be altered separately
+\end{itemize}
+\subsection{Goals of Programming}
+\begin{itemize}
+\item to describe a computation so it can be done mechanically:
+	\begin{itemize}
+	\item expressions compute values
+	\item commands cause effects
+	\end{itemize}
+\item to do so efficiently and correctly (complexity etc.)
+\item to allow easy modification as needs change
+	\begin{itemize}
+	\item by structuring the code neatly 
+	\item e.g. modules and classes to package various functions into easy-to-use abstractions
+	\end{itemize}
+\end{itemize}
+Programming in the small - writing code to do simple tasks, e.g. adding numbers or sorting lists
+
+programming in the large - using multiple modules to solve a messy task, e.g. using Google Vision and Android Studio packages to create a mobile application
 \\\\
-Expressions giving rise to values - computers as theoretical constructs
+One example of how to organize modules is object-oriented programming.
+\subsection{Why OCaml?}
+Using OCaML - ignore underlying system and focus on core concepts
 \begin{itemize}
 \item Values are immutable
 \item functions can't have side effects
 \end{itemize}
+\section{Recursion and Efficiency}
+\subsection{Expression Evaluation}
+In order to evaluate expressions, we may reduce expressions until they become a value. We write $E \rightarrow E'$ to say that $E$ is reduced to $E'$. When we write code that deals with expressions only, it's termed as functional programming.
+\subsection{Recursion Requirements}
+To be useful:
+\begin{itemize}
+\item Must have terminating condition
+\item Must reach the terminating condition
+\subsection{Summing Integers}
+\begin{lstlisting}[language=caml]
+let rec nsum n =
+  if n = 0 then
+    0
+  else
+    n + nsum (n - 1)
+\end{lstlisting}
+The function call is as such:
+\begin{align*}
+\text{nsum } 3 &\Rightarrow 3+(\text{nsum }2)\\
+&\Rightarrow3+(2+(\text{nsum }1))\\
+&\Rightarrow3+(2+(1+\text{nsum }0))\\
+&\Rightarrow3+(2+(1+0))
+\end{align*}
+The parentheses is a problem because the numbers are collected in a stack and are not evaluated until the innermost function is evaluated. This might lead to stack overflows for large \verb|n|.
+\subsection{What is a Stack?}
+\begin{itemize}
+\item A stack is a last-in-first-out data-structure
+\item We use a 'call stack' to keep track of the functions running at the moment
+	\begin{itemize}
+	\item Each element includes the function call, as well as the variables in the expressions that haven't been evaluated (which can only be evaluated when the later recursive functions return a value)
+	\end{itemize}
+\end{itemize}
+\textbf{Add diagram to show!!}
+\subsection{Tail Recursion}
+\begin{itemize}
+\item Idea is to evaluate the sum at each function call so there is no need to store any function calls with leftover variables to evaluate more expressions
+\item Only works when there is tail recursion optimisation in the compiler
+\end{itemize}
+\begin{lstlisting}[language=caml]
+let rec nsum n =
+  if n = 0 then
+    0
+  else
+    n + nsum (n - 1)
+(*stack overflow for big values of n!*)    
+
+let rec summing n total =
+  if n = 0 then
+    total
+  else
+    summing (n - 1) (n + total)
+(*no stack overflow!*)
+\end{lstlisting}
+However some languages, like Java, have compilers that can't recognise tail-recursive functions so either way would lead to a lot of memory stored in the stack.
+\\\\
+This is the reason why iterative functions are recommended rather recursive functions for dynamic programming!
+\\\\
+However, if memory is not a problem or the function has few recursive function calls then it is not worth the effort.
+\\\\
+\end{itemize}
+\subsection{Complexity and Big O}
+\subsubsection{Motivation}
+Compare code to see which is better.
+\begin{itemize}
+\item Faster code
+\item Lower memory
+\end{itemize}
+\subsubsection{Calculating Complexities}
+There are a thousand and one resources online, the main method is with recurrence relations, and if the function has random variables, then use expectation values.
+\section{Lists}
+Things to note:
+\begin{itemize}
+\item all elements in a list have the same type
+\item lists are ordered
+\end{itemize}
+\subsection{List Methods}
+\begin{lstlisting}[language=caml]
+(*concatenation*)
+x @ [2; 10]
+List.append x [2; 10] 
+(*reverse*)
+List.rev [(1, "one"); (2, "two")]
+\end{lstlisting}
+Time Complexity: $\mathcal{O}(n)$
+
+Space Complexity: $\mathcal{O}(n)$ (\verb|append| stores a call stack and evaluates the expression only when the last function call returns a value)
+\subsection{Strings}
+In a few programming languages, strings simply are lists of characters. In OCaml they are a separate type, unrelated to lists, reflecting the fact that strings are an abstract concept in themselves.
+\subsubsection{String Methods}
+\begin{lstlisting}[language=caml]
+String.length "abc"
+"abc" ^ "def"  (* concatenate two strings *)
+\end{lstlisting}
+\section{More Lists}
+\subsection{List Utilities}
+\begin{lstlisting}[language=caml]
+let rec take i = function
+  | [] -> []
+  | x::xs ->
+      if i > 0 then x :: take (i - 1) xs
+      else []
+      
+let rec drop i = function
+  | [] -> []
+  | x::xs ->
+      if i > 0 then drop (i-1) xs
+      else x::xs
+\end{lstlisting}
+Function \verb|take| is not iterative, but making it so would not improve its efficiency as the task requires copying up to i list elements, which must take $\mathcal{O}(n)$ space.
+\\\\
+Function \verb|drop| skips over $i$ list elements. This requires $\mathcal{O}(i)$ but constant space. It is iterative and much faster than \verb|take|, because \verb|drop|'s constant factor is smaller.
+\subsection{Linear Search}
+\begin{itemize}
+\item Linear Scan: $\mathcal{O}(n)$ 
+\item Ordered Searching: $\mathcal{O}(\log n)$ 
+\item Indexed Lookup: $\mathcal{O}(1)$ 
+\end{itemize}
+\subsection{Equality Tests}
+\begin{lstlisting}[language=caml]
+let rec member x = function
+ | [] -> false
+ | y::l ->
+    if x = y then true
+    else member x l
+\end{lstlisting}
+This function uses polymorphic equalities, i.e. \verb|<, >, =| etc. work for multiple types of values. However, for more complex types, these compare operators will not work.
+\\\\
+For simpler projects, where every use of these equalities is clear, it is okay to use them. But for larger codebases, it becomes dangerous.
+\subsection{Building and Unbuilding a List of Pairs}
+\begin{lstlisting}[language=caml]
+let rec zip xs ys =
+  match xs, ys with
+  | (x::xs, y::ys) -> (x, y) :: zip xs ys
+  | _ -> []
+  
+let rec unzip = function
+ | [] -> ([], [])
+ | (x, y)::pairs ->
+     let xs, ys = unzip pairs in
+     (x::xs, y::ys)
+\end{lstlisting}
+The wildcard pattern, \verb|_|, matches anything. Hence, we have to put it as the last pattern to test with, because patterns are tested in order of their definitions.
+\\\\
+The iterative version of \verb|unzip| would result in reversed lists.
+\begin{lstlisting}[language=caml]
+let rec revUnzip = function
+  | ([], xs, ys) -> (xs, ys)
+  | ((x, y)::pairs, xs, ys) ->
+      revUnzip (pairs, x::xs, y::ys)
+\end{lstlisting}
+We can write the unzip function in a cleaner way by having a helping function.
+\begin{lstlisting}[language=caml]
+let conspair ((x, y), (xs, ys)) = (x::xs, y::ys)
+
+let rec unzip = function
+  | [] -> ([], [])
+  | xy :: pairs -> conspair (xy, unzip pairs)
+\end{lstlisting}
+\section{Sorting}
+\subsection{Lower Bound}
+Height of binary tree of comparisons, $\mathcal{O}(\log(n!))$
+\subsection{Insertion Sort}
+\begin{lstlisting}[language=caml]
+let rec ins x = function
+  | [] -> [x]
+  | y::ys -> if x <= y then x :: y :: ys
+             else y :: ins x ys
+             
+let rec insort = function
+    | [] -> []
+    | x::xs -> ins x (insort xs)
+\end{lstlisting}
+\begin{itemize}
+\item Average time complexity: $\mathcal{O}(n^2)$ because average number of comparisons is $n/2$.
+\item Worst case time complexity:$\mathcal{O}(n^2)$
+\end{itemize}
+\subsection{QuickSort}
+\begin{lstlisting}[language=caml]
+let rec quick = function
+  | [] -> []
+  | [x] -> [x]
+  | a::bs ->
+      let rec part l r = function
+        | [] -> (quick l) @ (a :: quick r)
+        | x::xs ->
+            if (x <= a) then
+              part (x::l) r xs
+            else
+              part l (x::r) xs
+      in
+      part [] [] bs
+\end{lstlisting}
+To remove the append, we can use:
+\begin{lstlisting}[language=caml]
+let rec quik = function
+  | ([], sorted) -> sorted
+  | ([x], sorted) -> x::sorted
+  | a::bs, sorted ->
+     let rec part = function
+       | l, r, [] -> quik (l, a :: quik (r, sorted))
+       | l, r, x::xs ->
+           if x <= a then
+             part (x::l, r, xs)
+           else
+             part (l, x::r, xs)
+     in
+     part ([], [], bs)
+\end{lstlisting}
+\begin{itemize}
+\item Average case: $C(n)=2C(n/2)+n-1=\mathcal{O}(n\log(n))$
+\item Worst case: $C(n)=C(n-1)+C(1)+n-1=\mathcal{O}(n^2)$
+\end{itemize}
+With append: additional $n/2$ \verb|cons| due to append, leading to a bigger constant.
+\subsection{Mergesort}
+\begin{lstlisting}[language=caml]
+let rec merge = function
+  | [], ys -> ys
+  | xs, [] -> xs
+  | x::xs, y::ys ->
+      if x <= y then
+        x :: merge (xs, y::ys)
+      else
+        y :: merge (x::xs, ys)
+\end{lstlisting}
+\begin{lstlisting}[language=caml]
+let rec tmergesort = function
+  | [] -> []
+  | [x] -> [x]
+  | xs ->
+      let k = List.length xs / 2 in
+      let l = tmergesort (take k xs) in
+      let r = tmergesort (drop k xs) in
+      merge (l, r)
+\end{lstlisting}
+\begin{itemize}
+\item Average case = worst case = $\mathcal{O}(n\log n)$
+\end{itemize}
+\section{Datatypes and Trees}
+\subsection{Custom Datatypes}
+\begin{lstlisting}[language=caml]
+type vehicle = Bike
+             | Motorbike
+             | Car
+             | Lorry
+\end{lstlisting}
+By defining a custom type, OCaml can type check for us
+\begin{itemize}
+\item Check if functions have exhaustive pattern matching
+\item Check for type typos
+\end{itemize}
+Internally, OCaml might use bits to store which type which is fast and efficient
+\begin{lstlisting}[language=caml]
+let wheels = function
+| Bike -> 2
+| Motorbike -> 2
+| Car -> 4
+| Lorry -> 18
+\end{lstlisting}
+Each constructor can also have arguments.
+\begin{lstlisting}[language=caml]
+type vehicle = Bike
+             | Motorbike of int  (* engine size in CCs *)
+             | Car       of bool (* true if a Reliant Robin *)
+             | Lorry     of int  (* number of wheels *)
+\end{lstlisting}
+We can use these arguments for pattern matching.
+\begin{lstlisting}[language=caml]
+let wheels = function
+| Bike -> 2
+| Motorbike _ -> 2
+| Car robin -> if robin then 3 else 4
+| Lorry w -> w
+\end{lstlisting}
+\subsection{Error Handling}
+Exceptions are important as they allow us to find out which parts in the program have errors and caused the program to fail.
+\begin{lstlisting}[language=caml]
+exception Failure
+exception NoChange of int
+
+let divide a b = 
+	if b = 0 then raise Failure
+	else a / b
+	
+try
+  print_endline "pre exception";
+  raise (NoChange 1);
+  print_endline "post exception";
+with
+  | NoChange _ ->
+      print_endline "handled a NoChange exception"
+\end{lstlisting}
+Pattern matching works with exceptions too.
+\\\\
+Note that handling an expression means evaluating another expression and returning its value instead. 
+\\\\
+One criticism of OCaml is that noting in a function declaration indicates which exceptions it might raise. One alternative is to return a value of datatype \verb|option|.
+\begin{lstlisting}[language=caml]
+let x = Some 1
+let y = None
+type 'a option = None | Some of 'a
+
+let rec list_max = function
+  | []   -> None
+  | h::t -> begin
+      match list_max t with
+        | None   -> Some h
+        | Some m -> Some (max h m)
+      end
+\end{lstlisting}
+This way, every function returns either \verb|None| or \verb|Some| value.
+\subsubsection{Making Change with Exceptions}
+Because \verb|try...with| can change the flow of execution, we can code backtracking with it.
+\begin{lstlisting}[language=caml]
+exception Change
+let rec change till amt =
+  match till, amt with
+  | _, 0         -> []
+  | [], _        -> raise Change
+  | c::till, amt -> if amt < 0 then raise Change
+                    else try c :: change (c::till) (amt - c)
+                         with Change -> change till amt
+\end{lstlisting}
+$$
+\begin{aligned}
+\text{change [5; 2] 6}
+  \Rightarrow &\; \text{try 5::change [5; 2] 1}\\
+              &\; \text{with Change -> change [2] 6}\\
+  \Rightarrow &\; \text{try 5::(try 5::change [5; 2] (-4)}\\
+              &\; \text{with Change -> change [2] 1)}\\
+              &\; \text{with Change -> change [2] 6}\\
+  \Rightarrow &\; \text{5::(change [2] 1)}\\
+              &\; \text{with Change -> change [2] 6}\\
+  \Rightarrow &\; \text{try 5::(try 2::change [2] (-1)}\\
+              &\; \text{with Change -> change [] 1)}\\
+              &\; \text{with Change -> change [2] 6} \\
+  \Rightarrow &\; \text{try 5::(change [] 1)}\\
+              &\; \text{with Change -> change [2] 6} \\
+  \Rightarrow &\; \text{change [2] 6} \\
+  \Rightarrow &\; \text{try 2::change [2] 4}\\
+              &\; \text{with Change -> change [] 6} \\
+  \Rightarrow &\; \text{try 2::(try 2::change [2] 2}\\
+              &\; \text{with Change -> change [] 4)}\\
+              &\; \text{with Change -> change [] 6} \\
+  \Rightarrow &\; \text{try 2::(try 2::(try 2::change [2] 0 }\\
+              &\; \text{with Change -> change [] 2)}\\
+              &\; \text{with Change -> change [] 4)}\\
+              &\; \text{with Change -> change [] 6} \\
+  \Rightarrow &\; \text{try 2::(try 2::[2]}\\
+              &\; \text{with Change -> change [] 4)}\\
+              &\; \text{with Change -> change [] 6} \\
+  \Rightarrow &\; \text{try 2::[2; 2]}\\
+              &\; \text{with Change -> change [] 6} \\
+  \Rightarrow &\; \text{[2; 2; 2]} 
+\end{aligned}
+$$
+\subsection{Binary Trees}
+\begin{lstlisting}[language=caml]
+type 'a tree =
+  Lf
+| Br of 'a * 'a tree * 'a tree
+
+Br(1, Br(2, Br(4, Lf, Lf),
+            Br(5, Lf, Lf)),
+      Br(3, Lf, Lf))
+\end{lstlisting}
+Basic functions
+\begin{lstlisting}[language=caml]
+let rec count = function
+| Lf -> 0  (* number of branch nodes *)
+| Br (v, t1, t2) -> 1 + count t1 + count t2
+
+let rec depth = function
+| Lf -> 0  (* length of longest path *)
+| Br (v, t1, t2) -> 1 + max (depth t1) (depth t2)
+
+let rec leaves = function
+| Lf -> 1
+| Br (v, t1, t2) -> leaves t1 + leaves t2
+\end{lstlisting}
 \end{document}
